@@ -1,20 +1,22 @@
 # coding: utf-8
 require 'dxopal'
-require 'csv'
 include DXOpal
 
 require_remote 'player.rb'
 require_remote 'enemy.rb'
 require_remote 'block.rb'
+require_remote 'stage1.rb'
 
 Image.register(:player, 'images/sq.png') 
-Image.register(:enemy, 'images/sq.png') 
+Image.register(:enemy, 'images/enemy.png') 
 
 Image.register(:brick, 'images/Renga.png') 
-Image.register(:tile, 'images/sq.png') 
-Image.register(:asphalt, 'images/sq.png') 
+Image.register(:tile, 'images/tile.png') 
+Image.register(:asphalt, 'images/asufaruto.png') 
+Image.register(:wood, 'images/wood.png') 
+Image.register(:woodbox, 'images/woodbox.png') 
 
-#field = CSV.read("field.csv")
+Image.register(:sq, 'images/sq.png') 
 
 Window.load_resources do
   Window.width  = 1200
@@ -28,6 +30,17 @@ Window.load_resources do
   
   brick_img = Image[:brick]
   brick_img.set_color_key([0, 0, 0])
+  tile_img = Image[:tile]
+  tile_img.set_color_key([0, 0, 0])
+  asphalt_img = Image[:asphalt]
+  asphalt_img.set_color_key([0, 0, 0])
+  wood_img = Image[:wood]
+  wood_img.set_color_key([0, 0, 0])
+  woodbox_img = Image[:woodbox]
+  woodbox_img.set_color_key([0, 0, 0])
+  
+  sq_img = Image[:sq]
+  sq_img.set_color_key([0, 0, 0])
   
   player = Player.new(400, 500, player_img)
 
@@ -37,15 +50,26 @@ Window.load_resources do
   end
   
   blocks = []
-  10.times do |i|
-    10.times do |j|
-      blocks << Block.new(i*48,j*48,brick_img)
+  15.times do |i|
+    25.times do |j|
+      case $field[i][j]
+      when 1 then 
+        blocks << Block.new(j*48,i*48,asphalt_img)
+      when 0 then 
+        blocks << Block.new(j*48,i*48,tile_img)
+      when 2 then 
+        blocks << Block.new(j*48,i*48,asphalt_img)
+      when 6 then 
+        blocks << Block.new(j*48,i*48,woodbox_img)
+      else
+        
+      end
     end
   end
 
   Window.loop do
-    Sprite.update(enemies)
-    Sprite.draw(enemies)
+    #Sprite.update(enemies)
+    #Sprite.draw(enemies)
     Sprite.draw(blocks)
     
     player.update
