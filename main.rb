@@ -1,11 +1,11 @@
 # coding: utf-8
 require 'dxopal'
-require 'csv'
 include DXOpal
 
 require_remote 'player.rb'
 require_remote 'enemy.rb'
 require_remote 'block.rb'
+require_remote 'stage1.rb'
 
 Image.register(:player, 'images/sq.png') 
 Image.register(:enemy, 'images/sq.png') 
@@ -14,7 +14,7 @@ Image.register(:brick, 'images/Renga.png')
 Image.register(:tile, 'images/sq.png') 
 Image.register(:asphalt, 'images/sq.png') 
 
-#field = CSV.read("field.csv")
+Image.register(:sq, 'images/sq.png') 
 
 Window.load_resources do
   Window.width  = 1200
@@ -37,15 +37,20 @@ Window.load_resources do
   end
   
   blocks = []
-  10.times do |i|
-    10.times do |j|
-      blocks << Block.new(i*48,j*48,brick_img)
+  15.times do |i|
+    25.times do |j|
+      case $field[i][j]
+      when 0 then 
+        blocks << Block.new(j*48,i*48,brick_img)
+      else
+        
+      end
     end
   end
 
   Window.loop do
-    Sprite.update(enemies)
-    Sprite.draw(enemies)
+    #Sprite.update(enemies)
+    #Sprite.draw(enemies)
     Sprite.draw(blocks)
     
     player.update
