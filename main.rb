@@ -1,5 +1,6 @@
 # coding: utf-8
 require 'dxopal'
+require 'csv'
 include DXOpal
 
 require_remote 'player.rb'
@@ -7,6 +8,12 @@ require_remote 'enemy.rb'
 
 Image.register(:player, 'images/sq.png') 
 Image.register(:enemy, 'images/sq.png') 
+
+Image.register(:brick, 'images/sq.png') 
+Image.register(:tile, 'images/sq.png') 
+Image.register(:asphalt, 'images/sq.png') 
+
+field = CSV.read("field.csv")
 
 Window.load_resources do
   Window.width  = 800
