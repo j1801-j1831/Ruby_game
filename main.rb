@@ -182,31 +182,7 @@ Window.load_resources do
       shots.delete_at(i)
     end
     
-    dx = Input.x
-    dy = Input.y
-    if dx!=0
-      player.update_dir(dx,0)
-    elsif dy!=0
-      player.update_dir(0,dy)
-    end
-    player.update(dx*4,0)
-    blocks_now.each do |x|
-      if [6,0].include?(x.type)
-        if player === x
-          player.update(-dx*4,0)
-          break
-        end
-      end
-    end
-    player.update(0,dy*4)
-    blocks_now.each do |x|
-      if [6,0].include?(x.type)
-        if player === x
-          player.update(0,-dy*4)
-          break
-        end
-      end
-    end
+    player.make_move(blocks_now)
     
     enemies.each do |x|
       if rand(100) == 0
