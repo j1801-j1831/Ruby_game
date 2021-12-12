@@ -91,6 +91,7 @@ Window.load_resources do
   Window.loop do
     #Sprite.update(enemies)
     #Sprite.draw(enemies)
+=begin
     if player.y <= 0 #上移動
       move[up]=1
     elsif player.y >= Window.height - player.image.height #下移動
@@ -128,7 +129,8 @@ Window.load_resources do
     elsif blocks_now==blocks2
       Sprite.draw(blocks2)
     end
-    
+=end
+
     dx = Input.x*2
     dy = Input.y*2
     
