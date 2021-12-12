@@ -10,6 +10,15 @@ require_remote 'stage1.rb'
 require_remote 'stage2.rb'
 
 Image.register(:player, 'images/front_player_small.png') 
+Image.register(:player0, 'images/player_move.png') 
+Image.register(:player1, 'images/player_stop.png') 
+Image.register(:player2, 'images/player_move_flip.png') 
+Image.register(:player3, 'images/player_stop_flip.png') 
+Image.register(:player4, 'images/player_back.png') 
+Image.register(:player5, 'images/player_back_flip.png') 
+Image.register(:player6, 'images/front_player_small.png') 
+Image.register(:player7, 'images/front_player_small.flip.png') 
+
 Image.register(:enemy, 'images/dorobo_front_left_small.png') 
 Image.register(:enemy0, 'images/dorobo_walk_small.png') 
 Image.register(:enemy1, 'images/dorobo_stop_small.png') 
@@ -39,6 +48,11 @@ Window.load_resources do
 
   player_img = Image[:player]
   player_img.set_color_key([0, 0, 0])
+  
+  player_imgs = [Image[:player0],Image[:player1],Image[:player2],Image[:player3],Image[:player4],Image[:player5],Image[:player6],Image[:player7]]
+  player_imgs.each do |x|
+    x.set_color_key([0, 0, 0])
+  end
 
   enemy_img = Image[:enemy]
   enemy_img.set_color_key([0, 0, 0])
@@ -65,7 +79,7 @@ Window.load_resources do
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
   
-  player = Player.new(240, 240, player_img)
+  player = Player.new(240, 240, player_img, player_imgs)
   
   enemies_field=Array.new(Height).map{Array.new(Width,0)}
   enemies = []
