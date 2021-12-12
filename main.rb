@@ -9,14 +9,14 @@ require_remote 'shot.rb'
 require_remote 'stage1.rb'
 require_remote 'stage2.rb'
 
-Image.register(:player, 'images/sq.png') 
-Image.register(:enemy, 'images/enemy.png') 
+Image.register(:player, 'images/front_player1_touka.png') 
+Image.register(:enemy, 'images/dorobo_front_left_small.png') 
 
 Image.register(:brick, 'images/Renga.png') 
 Image.register(:tile, 'images/tile.png') 
 Image.register(:asphalt, 'images/asufaruto.png') 
 Image.register(:wood, 'images/wood.png') 
-Image.register(:woodbox, 'images/woodbox.png') 
+Image.register(:woodbox, 'images/woodbox_2.png') 
 
 Image.register(:sq, 'images/sq.png') 
 
