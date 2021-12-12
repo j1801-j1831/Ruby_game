@@ -5,6 +5,7 @@ class Player < Sprite
     super
     @dirx=0 #向き
     @diry=1
+    @hp=3
     #self.collision = [x, y, x+48, y+48]
   end
   def update(dx,dy)
@@ -27,5 +28,11 @@ class Player < Sprite
   end
   def diry
     return @diry
+  end
+  def returnhp
+    return @hp
+  end
+  def decrease_hp
+    @hp-=1
   end
 end
