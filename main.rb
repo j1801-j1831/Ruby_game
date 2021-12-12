@@ -5,6 +5,7 @@ include DXOpal
 require_remote 'player.rb'
 require_remote 'enemy.rb'
 require_remote 'block.rb'
+require_remote 'shot.rb'
 require_remote 'stage1.rb'
 
 Image.register(:player, 'images/sq.png') 
@@ -42,7 +43,7 @@ Window.load_resources do
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
   
-  player = Player.new(250, 300, player_img)
+  player = Player.new(240, 240, player_img)
 
   enemies = []
   10.times do
@@ -66,28 +67,43 @@ Window.load_resources do
       end
     end
   end
+  
+  shots = []
 
   Window.loop do
     #Sprite.update(enemies)
     #Sprite.draw(enemies)
     Sprite.draw(blocks)
     
-    dx = Input.x*2
-    dy = Input.y*2
-    player.update(dx,0)
+    if Input.key_push?( K_SPACE )
+      shots << Shot.new(player.xx,player.yy,sq_img,player.dirx*8,player.diry*8)
+    end
+    shots.each do |x|
+      x.update
+    end
+    Sprite.draw(shots)
+    
+    dx = Input.x
+    dy = Input.y
+    if dx!=0
+      player.update_dir(dx,0)
+    elsif dy!=0
+      player.update_dir(0,dy)
+    end
+    player.update(dx*4,0)
     blocks.each do |x|
       if [6,0].include?(x.type)
         if player === x
-          player.update(-dx,0)
+          player.update(-dx*4,0)
           break
         end
       end
     end
-    player.update(0,dy)
+    player.update(0,dy*4)
     blocks.each do |x|
       if [6,0].include?(x.type)
         if player === x
-          player.update(0,-dy)
+          player.update(0,-dy*4)
           break
         end
       end
