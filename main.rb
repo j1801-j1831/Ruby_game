@@ -19,6 +19,9 @@ Image.register(:woodbox, 'images/woodbox.png')
 
 Image.register(:sq, 'images/sq.png') 
 
+Height = 15
+Width = 25
+
 Window.load_resources do
   Window.width  = 1200
   Window.height = 720
@@ -44,10 +47,23 @@ Window.load_resources do
   sq_img.set_color_key([0, 0, 0])
   
   player = Player.new(240, 240, player_img)
-
+  
+  enemies_field=Array.new(Height).map{Array.new(Width,0)}
   enemies = []
   10.times do
-    enemies << Enemy.new(rand(800), rand(600), enemy_img)
+    while true do
+      x=rand(Width)
+      y=rand(Height)
+      if $field[y][x] != 1
+        next
+      end
+      if enemies_field[y][x] != 0
+        next
+      end
+      enemies_field[y][x]=1
+      enemies << Enemy.new(x*48, y*48, enemy_img)
+      break
+    end
   end
   
   blocks = []
@@ -71,9 +87,6 @@ Window.load_resources do
   shots = []
 
   Window.loop do
-    #Sprite.update(enemies)
-    #Sprite.draw(enemies)
-    Sprite.draw(blocks)
     
     if Input.key_push?( K_SPACE ) && shots.size < 2
       shots << Shot.new(player.xx,player.yy,sq_img,player.dirx*8,player.diry*8)
@@ -88,7 +101,7 @@ Window.load_resources do
     del_shots.each do |i|
       shots.delete_at(i)
     end
-    Sprite.draw(shots)
+    
     
     dx = Input.x
     dy = Input.y
@@ -115,6 +128,12 @@ Window.load_resources do
         end
       end
     end
+    
+    Sprite.update(enemies)
+    
+    Sprite.draw(blocks)
+    Sprite.draw(enemies)
+    Sprite.draw(shots)
     player.draw
 
   end
