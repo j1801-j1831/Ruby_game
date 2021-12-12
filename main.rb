@@ -42,7 +42,7 @@ Window.load_resources do
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
   
-  player = Player.new(400, 500, player_img)
+  player = Player.new(250, 300, player_img)
 
   enemies = []
   10.times do
@@ -54,13 +54,13 @@ Window.load_resources do
     25.times do |j|
       case $field[i][j]
       when 1 then 
-        blocks << Block.new(j*48,i*48,asphalt_img)
+        blocks << Block.new(j*48,i*48,asphalt_img,1)
       when 0 then 
-        blocks << Block.new(j*48,i*48,tile_img)
+        blocks << Block.new(j*48,i*48,tile_img,0)
       when 2 then 
-        blocks << Block.new(j*48,i*48,asphalt_img)
+        blocks << Block.new(j*48,i*48,asphalt_img,2)
       when 6 then 
-        blocks << Block.new(j*48,i*48,woodbox_img)
+        blocks << Block.new(j*48,i*48,woodbox_img,6)
       else
         
       end
@@ -72,10 +72,27 @@ Window.load_resources do
     #Sprite.draw(enemies)
     Sprite.draw(blocks)
     
-    player.update
+    dx = Input.x*2
+    dy = Input.y*2
+    player.update(dx,0)
+    blocks.each do |x|
+      if x.type == 6
+        if player === x
+          player.update(-dx,0)
+          break
+        end
+      end
+    end
+    player.update(0,dy)
+    blocks.each do |x|
+      if x.type == 6
+        if player === x
+          player.update(0,-dy)
+          break
+        end
+      end
+    end
     player.draw
 
-    # 当たり判定
-    Sprite.check(player, enemies)
   end
 end
