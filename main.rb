@@ -6,7 +6,7 @@ require_remote 'player.rb'
 require_remote 'enemy.rb'
 require_remote 'block.rb'
 require_remote 'shot.rb'
-require_remote 'stage4.rb'
+require_remote 'stage1.rb'
 
 Image.register(:player, 'images/front_player1_touka.png') 
 Image.register(:enemy, 'images/dorobo_front_left_small.png') 
