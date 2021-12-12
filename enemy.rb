@@ -31,17 +31,17 @@ class Enemy < Sprite
   def update
     if @moving_times > 0
       @moving_times-=1
-      @image_interval=(@image_interval+1)%10
+      @image_interval=(@image_interval+1)%20
       self.x+=@dx
       self.y+=@dy
       if @dx<0
-        self.image=@images[0+(@image_interval<5?0:1)]
+        self.image=@images[0+(@image_interval<10?0:1)]
       elsif @dx>0
-        self.image=@images[2+(@image_interval<5?0:1)]
+        self.image=@images[2+(@image_interval<10?0:1)]
       elsif @dy<0
-        self.image=@images[4+(@image_interval<5?0:1)]
+        self.image=@images[4+(@image_interval<10?0:1)]
       elsif @dy>0
-        self.image=@images[6+(@image_interval<5?0:1)]
+        self.image=@images[6+(@image_interval<10?0:1)]
       end
     end
   end

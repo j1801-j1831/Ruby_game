@@ -1,16 +1,31 @@
 # coding: utf-8
 
 class Player < Sprite
-  def initialize( x=0, y=0, image=nil )
+  def initialize( x=0, y=0, image=nil, images=nil)
     super
+    self.image=images[0]
+    @images=images
     @dirx=0 #向き
     @diry=1
+    @image_interval=0
     #self.collision = [x, y, x+48, y+48]
   end
   def update(dx,dy)
-    self.x += dx
-    self.y += dy
-    #self.collision = [self.x, self.y, self.x+48, self.y+48]
+    if dx!=0||dy!=0
+      self.x += dx
+      self.y += dy
+      @image_interval=(@image_interval+1)%10
+      if @dirx<0
+        self.image=@images[0+(@image_interval<5?0:1)]
+      elsif @dirx>0
+        self.image=@images[2+(@image_interval<5?0:1)]
+      elsif @diry<0
+        self.image=@images[4+(@image_interval<5?0:1)]
+      elsif @diry>0
+        self.image=@images[6+(@image_interval<5?0:1)]
+      end
+      #self.collision = [self.x, self.y, self.x+48, self.y+48]
+    end
   end
   def update_dir(dx,dy)
     @dirx=dx
