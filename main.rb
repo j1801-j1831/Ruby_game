@@ -96,40 +96,37 @@ Window.load_resources do
   15.times do |i|
     25.times do |j|
       case $field[i][j]
-      when 1 then
-        blocks << Block.new(j*48,i*48,asphalt_img,1)
-      when 0 then 
-        blocks << Block.new(j*48,i*48,tile_img,0)
-      when 2 then 
-        blocks << Block.new(j*48,i*48,asphalt_img,2)
-      when 6 then 
-        blocks << Block.new(j*48,i*48,woodbox_img,6)
-      else
+        when 1 then
+          blocks << Block.new(j*48,i*48,asphalt_img,1)
+        when 0 then 
+          blocks << Block.new(j*48,i*48,tile_img,0)
+        when 2 then 
+          blocks << Block.new(j*48,i*48,asphalt_img,2)
+        when 6 then
+          blocks << Block.new(j*48,i*48,woodbox_img,6)
+        else
       end
-      
       case $field2[i][j]
-      when 1 then
-        blocks2 << Block.new(j*48,i*48,asphalt_img,1)
-      when 0 then
-        blocks2 << Block.new(j*48,i*48,tile_img,0)
-      when 2 then
-        blocks2 << Block.new(j*48,i*48,asphalt_img,2)
-      when 6 then
-        blocks2 << Block.new(j*48,i*48,woodbox_img,6)
-      else
+        when 1 then
+          blocks2 << Block.new(j*48,i*48,asphalt_img,1)
+        when 0 then 
+          blocks2 << Block.new(j*48,i*48,tile_img,0)
+        when 2 then 
+          blocks2 << Block.new(j*48,i*48,asphalt_img,2)
+        when 6 then
+          blocks2 << Block.new(j*48,i*48,woodbox_img,6)
+        else
       end
-      
     end
   end
   
   shots = []
 
-  move=[]
+  move=[0,0,0,0]
   up=0
   down=1
   right=2
   left=3
-  move[0]=0
   blocks_now=blocks
   Window.loop do
     #Sprite.update(enemies)
@@ -172,7 +169,7 @@ Window.load_resources do
       Sprite.draw(blocks2)
     end
     
-    hearts=[]
+    hearts=Array.new(3)
     hearts[0] = Sprite.new(0,0,heartB_img)
     hearts[1] = Sprite.new(32,0,heartB_img)
     hearts[2] = Sprite.new(64,0,heartB_img)
@@ -201,31 +198,7 @@ Window.load_resources do
       shots.delete_at(i)
     end
     
-    dx = Input.x
-    dy = Input.y
-    if dx!=0
-      player.update_dir(dx,0)
-    elsif dy!=0
-      player.update_dir(0,dy)
-    end
-    player.update(dx*4,0)
-    blocks_now.each do |x|
-      if [6,0].include?(x.type)
-        if player === x
-          player.update(-dx*4,0)
-          break
-        end
-      end
-    end
-    player.update(0,dy*4)
-    blocks_now.each do |x|
-      if [6,0].include?(x.type)
-        if player === x
-          player.update(0,-dy*4)
-          break
-        end
-      end
-    end
+    player.make_move(blocks_now)
     
     enemies.each do |x|
       if rand(100) == 0
