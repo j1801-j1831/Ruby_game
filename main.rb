@@ -75,11 +75,18 @@ Window.load_resources do
     #Sprite.draw(enemies)
     Sprite.draw(blocks)
     
-    if Input.key_push?( K_SPACE )
+    if Input.key_push?( K_SPACE ) && shots.size < 2
       shots << Shot.new(player.xx,player.yy,sq_img,player.dirx*8,player.diry*8)
     end
-    shots.each do |x|
+    del_shots=[]
+    shots.each_with_index do |x, i|
       x.update
+      if x.vanished?
+        del_shots << i
+      end
+    end
+    del_shots.each do |i|
+      shots.delete_at(i)
     end
     Sprite.draw(shots)
     
