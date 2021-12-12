@@ -76,7 +76,7 @@ Window.load_resources do
     dy = Input.y*2
     player.update(dx,0)
     blocks.each do |x|
-      if x.type == 6
+      if [6,0].include?(x.type)
         if player === x
           player.update(-dx,0)
           break
@@ -85,7 +85,7 @@ Window.load_resources do
     end
     player.update(0,dy)
     blocks.each do |x|
-      if x.type == 6
+      if [6,0].include?(x.type)
         if player === x
           player.update(0,-dy)
           break
