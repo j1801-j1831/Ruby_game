@@ -50,17 +50,22 @@ Window.load_resources do
   end
   
   blocks = []
+  blocks2 = []
   15.times do |i|
     25.times do |j|
       case $field[i][j]
-      when 1 then 
+      when 1 then
         blocks << Block.new(j*48,i*48,asphalt_img)
+        blocks2 << Block.new(j*48,i*48,asphalt_img)
       when 0 then 
         blocks << Block.new(j*48,i*48,tile_img)
+        blocks2 << Block.new(j*48,i*48,tile_img)
       when 2 then 
         blocks << Block.new(j*48,i*48,asphalt_img)
+        blocks2 << Block.new(j*48,i*48,asphalt_img)
       when 6 then 
         blocks << Block.new(j*48,i*48,woodbox_img)
+        blocks2 << Block.new(j*48,i*48,woodbox_img)
       else
         
       end
