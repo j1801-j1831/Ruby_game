@@ -38,6 +38,9 @@ Image.register(:woodbox, 'images/woodbox_2.png')
 Image.register(:heart, 'images/HP.png')
 Image.register(:heartB, 'images/HP_black.png')
 
+Image.register(:gameover, 'images/gemeover.png')
+Image.register(:clear, 'images/GAMECLEAR_KANSEI.png')
+
 Image.register(:bullet0, 'images/TNT_left.png') 
 Image.register(:bullet1, 'images/TNT_right.png') 
 Image.register(:bullet2, 'images/TNT_up.png')
@@ -56,7 +59,7 @@ Window.load_resources do
   
   Height = 15
   Width = 25
-  
+
   enemies_num=[10,10,10,10]
 
   player_imgs = [Image[:player0],Image[:player1],Image[:player2],Image[:player3],Image[:player4],Image[:player5],Image[:player6],Image[:player7]]
@@ -94,6 +97,11 @@ Window.load_resources do
   heart_img.set_color_key([0, 0, 0])
   heartB_img = Image[:heartB]
   heartB_img.set_color_key([0, 0, 0])
+  
+  gameover_img = Image[:gameover]
+  gameover_img.set_color_key([0, 0, 0])
+  clear_img = Image[:clear]
+  clear_img.set_color_key([0, 0, 0])
   
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
@@ -219,10 +227,14 @@ Window.load_resources do
     
     Sprite.draw(blocks[now_stage])
     
-    hearts=Array.new(3)
+     hearts=Array.new(3)
     hearts[0] = Sprite.new(0,0,heartB_img)
     hearts[1] = Sprite.new(32,0,heartB_img)
     hearts[2] = Sprite.new(64,0,heartB_img)
+    
+    if Input.key_push?(K_A)
+      player.decrease_hp
+    end
     
     player.returnhp.times do |i|
       hearts[i] = Sprite.new(32*i,0,heart_img)
@@ -231,17 +243,15 @@ Window.load_resources do
     Sprite.draw(hearts)
     
     if Input.key_push?( K_SPACE ) && shots.size < 2
-      idx=0
       if player.dirx < 0
-        idx=0
+        shots << Shot.new(player.xx,player.yy+15,bullet_imgs[0],player.dirx*8,player.diry*8)
       elsif player.dirx > 0
-        idx=1
+        shots << Shot.new(player.xx,player.yy+15,bullet_imgs[1],player.dirx*8,player.diry*8)
       elsif player.diry < 0
-        idx=2
+        shots << Shot.new(player.xx+10,player.yy,bullet_imgs[2],player.dirx*8,player.diry*8)
       elsif player.diry > 0
-        idx=3
+        shots << Shot.new(player.xx+10,player.yy,bullet_imgs[3],player.dirx*8,player.diry*8)
       end
-      shots << Shot.new(player.xx,player.yy,bullet_imgs[idx],player.dirx*8,player.diry*8)
     end
     del_shots=[]
     shots.each_with_index do |x, i|
@@ -279,6 +289,8 @@ Window.load_resources do
       shots.delete_at(i)
     end
     
+    player.make_move(blocks[now_stage])
+    
     enemies[now_stage].each do |x|
       if x.vanished?
         next
@@ -288,13 +300,13 @@ Window.load_resources do
       end
       if rand(100) == 0
         if x.dx < 0
-          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[0],x.dx*2,x.dy*2)
+          enemy_shots << Shot.new(x.xx,x.yy+15,enemy_bullet_imgs[0],x.dx*2,x.dy*2)
         elsif x.dx > 0
-          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[1],x.dx*2,x.dy*2)
+          enemy_shots << Shot.new(x.xx,x.yy+15,enemy_bullet_imgs[1],x.dx*2,x.dy*2)
         elsif x.dy < 0
-          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[2],x.dx*2,x.dy*2)
+          enemy_shots << Shot.new(x.xx+15,x.yy,enemy_bullet_imgs[2],x.dx*2,x.dy*2)
         elsif x.dy > 0
-          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[3],x.dx*2,x.dy*2)
+          enemy_shots << Shot.new(x.xx+15,x.yy,enemy_bullet_imgs[3],x.dx*2,x.dy*2)
         end
       end
     end
@@ -327,7 +339,6 @@ Window.load_resources do
       enemy_shots.delete_at(i)
     end
     
-    player.make_move(blocks[now_stage])
     
     Sprite.update(enemies[now_stage])
     
@@ -338,5 +349,14 @@ Window.load_resources do
     player.draw
     Window.draw_box_fill(Window.width-320,0,Window.width,40,C_BLACK)
     Window.draw_font(Window.width-300,0,"NOW STAGE ENEMY:#{enemies_num[now_stage]}",font,color: C_YELLOW)
+    #Window.draw(0,0,clear_img)
+    if enemies_num[0]==0&&enemies_num[1]==0&&enemies_num[2]==0&&enemies_num[3]==0
+      Window.draw_box_fill(0,0,Window.width,Window.height,C_BLACK)
+      Window.draw(0,0,clear_img)
+    end
+    if player.returnhp<=0
+      Window.draw_box_fill(0,0,Window.width,Window.height,C_BLACK)
+      Window.draw(0,0,gameover_img)
+    end
   end
 end
