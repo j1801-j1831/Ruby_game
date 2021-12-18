@@ -9,15 +9,15 @@ require_remote 'shot.rb'
 require_remote 'stage1.rb'
 require_remote 'stage2.rb'
 
-Image.register(:player, 'images/front_player_small.png') 
+Image.register(:player, 'images/front_player1_touka.png') 
 Image.register(:player0, 'images/player_move.png') 
 Image.register(:player1, 'images/player_stop.png') 
 Image.register(:player2, 'images/player_move_flip.png') 
 Image.register(:player3, 'images/player_stop_flip.png') 
 Image.register(:player4, 'images/player_back.png') 
 Image.register(:player5, 'images/player_back_flip.png') 
-Image.register(:player6, 'images/front_player_small.png') 
-Image.register(:player7, 'images/front_player_small.flip.png') 
+Image.register(:player6, 'images/front_player1_touka.png') 
+Image.register(:player7, 'images/front_player1_touka_flip.png') 
 
 Image.register(:enemy, 'images/dorobo_front_left_small.png') 
 Image.register(:enemy0, 'images/dorobo_walk_small.png') 
