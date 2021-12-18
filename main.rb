@@ -37,8 +37,8 @@ Image.register(:woodbox, 'images/woodbox_2.png')
 
 Image.register(:bullet0, 'images/TNT_left.png') 
 Image.register(:bullet1, 'images/TNT_right.png') 
-Image.register(:bullet2, 'images/TNT_down.png')
-Image.register(:bullet3, 'images/TNT_up.png')
+Image.register(:bullet2, 'images/TNT_up.png')
+Image.register(:bullet3, 'images/TNT_down.png')
 
 Image.register(:sq, 'images/sq.png') 
 
@@ -91,7 +91,7 @@ Window.load_resources do
   enemies_field=Array.new(4).map{Array.new(Height).map{Array.new(Width,0)}}
   enemies = [[],[],[],[]]
   4.times do |i|
-    5.times do
+    30.times do
       while true do
         x=rand(Width)
         y=rand(Height)
