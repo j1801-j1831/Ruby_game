@@ -60,7 +60,7 @@ class Player < Sprite
     end
     self.update(dx*4,0)
     blocks_now.each do |x|
-      if [6,0].include?(x.type)
+      if [3,6,0].include?(x.type)
         if self === x
           self.update(-dx*4,0)
           break
@@ -69,7 +69,7 @@ class Player < Sprite
     end
     self.update(0,dy*4)
     blocks_now.each do |x|
-      if [6,0].include?(x.type)
+      if [3,6,0].include?(x.type)
         if self === x
           self.update(0,-dy*4)
           break
