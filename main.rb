@@ -56,6 +56,8 @@ Window.load_resources do
   
   Height = 15
   Width = 25
+  
+  enemies_num=[30,30,30,30]
 
   player_imgs = [Image[:player0],Image[:player1],Image[:player2],Image[:player3],Image[:player4],Image[:player5],Image[:player6],Image[:player7]]
   player_imgs.each do |x|
@@ -96,6 +98,8 @@ Window.load_resources do
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
   
+  font=Font.new(32,"ＭＳ ゴシック")
+  
   player = Player.new(240, 240, player_imgs[0], player_imgs)
   
   fields = []
@@ -109,7 +113,7 @@ Window.load_resources do
   enemies_field=Array.new(4).map{Array.new(Height).map{Array.new(Width,0)}}
   enemies = [[],[],[],[]]
   4.times do |i|
-    30.times do
+    enemies_num[i].times do
       while true do
         x=rand(Width)
         y=rand(Height)
@@ -243,7 +247,11 @@ Window.load_resources do
     shots.each_with_index do |x, i|
       x.update
       enemies[now_stage].each do |y|
+        if y.vanished?
+          next
+        end
         if x===y
+          enemies_num[now_stage]=enemies_num[now_stage]-1
           x.vanish
           y.vanish
           break
@@ -305,5 +313,7 @@ Window.load_resources do
     Sprite.draw(enemy_shots)
     Sprite.draw(shots)
     player.draw
+    Window.draw_box_fill(Window.width-320,0,Window.width,40,C_BLACK)
+    Window.draw_font(Window.width-300,0,"NOW STAGE ENEMY:#{enemies_num[now_stage]}",font,color: C_YELLOW)
   end
 end
