@@ -43,6 +43,11 @@ Image.register(:bullet1, 'images/TNT_right.png')
 Image.register(:bullet2, 'images/TNT_up.png')
 Image.register(:bullet3, 'images/TNT_down.png')
 
+Image.register(:enemy_bullet0, 'images/knife.png') 
+Image.register(:enemy_bullet1, 'images/knife.png') 
+Image.register(:enemy_bullet2, 'images/knife_up_down.png')
+Image.register(:enemy_bullet3, 'images/knife_up_down.png')
+
 Image.register(:sq, 'images/sq.png') 
 
 Window.load_resources do
@@ -63,7 +68,12 @@ Window.load_resources do
   end
   
   bullet_imgs = [Image[:bullet0],Image[:bullet1],Image[:bullet2],Image[:bullet3]]
-  enemy_imgs.each do |x|
+  bullet_imgs.each do |x|
+    x.set_color_key([0, 0, 0])
+  end
+  
+  enemy_bullet_imgs = [Image[:enemy_bullet0],Image[:enemy_bullet1],Image[:enemy_bullet2],Image[:enemy_bullet3]]
+  enemy_bullet_imgs.each do |x|
     x.set_color_key([0, 0, 0])
   end
   
@@ -268,7 +278,7 @@ Window.load_resources do
         if idx==-1
           next
         end
-        enemy_shots << Shot.new(x.xx,x.yy,bullet_imgs[idx],x.dx*2,x.dy*2)
+        enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[idx],x.dx*2,x.dy*2)
       end
     end
     enemy_del_shots=[]
