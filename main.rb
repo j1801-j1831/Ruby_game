@@ -227,15 +227,10 @@ Window.load_resources do
     
     Sprite.draw(blocks[now_stage])
     
-     hearts=Array.new(3)
-    hearts[0] = Sprite.new(0,0,heartB_img)
-    hearts[1] = Sprite.new(32,0,heartB_img)
-    hearts[2] = Sprite.new(64,0,heartB_img)
-    
-    if Input.key_push?(K_A)
-      player.decrease_hp
+    hearts=Array.new(5)
+    5.times do |i|
+      hearts[i] = Sprite.new(32*i,0,heartB_img)
     end
-    
     player.returnhp.times do |i|
       hearts[i] = Sprite.new(32*i,0,heart_img)
     end

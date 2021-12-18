@@ -8,7 +8,7 @@ class Player < Sprite
     @dirx=0 #向き
     @diry=1
     @image_interval=0
-    @hp=3
+    @hp=5
     #self.collision = [x, y, x+48, y+48]
   end
   def update(dx,dy)
