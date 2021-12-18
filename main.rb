@@ -43,10 +43,10 @@ Image.register(:bullet1, 'images/TNT_right.png')
 Image.register(:bullet2, 'images/TNT_up.png')
 Image.register(:bullet3, 'images/TNT_down.png')
 
-Image.register(:enemy_bullet0, 'images/knife.png') 
+Image.register(:enemy_bullet0, 'images/knife_left.png') 
 Image.register(:enemy_bullet1, 'images/knife.png') 
 Image.register(:enemy_bullet2, 'images/knife_up_down.png')
-Image.register(:enemy_bullet3, 'images/knife_up_down.png')
+Image.register(:enemy_bullet3, 'images/knife_down.png')
 
 Image.register(:sq, 'images/sq.png') 
 
@@ -57,7 +57,7 @@ Window.load_resources do
   Height = 15
   Width = 25
   
-  enemies_num=[30,30,30,30]
+  enemies_num=[10,10,10,10]
 
   player_imgs = [Image[:player0],Image[:player1],Image[:player2],Image[:player3],Image[:player4],Image[:player5],Image[:player6],Image[:player7]]
   player_imgs.each do |x|
@@ -117,7 +117,7 @@ Window.load_resources do
       while true do
         x=rand(Width)
         y=rand(Height)
-        if ![1,2].include?(fields[i][y][x])
+        if [3,6,0].include?(fields[i][y][x])
           next
         end
         if enemies_field[i][y][x] != 0
@@ -259,6 +259,20 @@ Window.load_resources do
       end
       if x.vanished?
         del_shots << i
+        next
+      end
+      blocks[now_stage].each do |y|
+        if ![3,6,0].include?(y.type)
+          next
+        end
+        if x===y
+          x.vanish
+          break
+        end
+      end
+      if x.vanished?
+        del_shots << i
+        next
       end
     end
     del_shots.each do |i|
@@ -273,20 +287,15 @@ Window.load_resources do
         x.make_move(fields[now_stage],enemies_field[now_stage])
       end
       if rand(100) == 0
-        idx=-1
         if x.dx < 0
-          idx=0
+          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[0],x.dx*2,x.dy*2)
         elsif x.dx > 0
-          idx=1
+          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[1],x.dx*2,x.dy*2)
         elsif x.dy < 0
-          idx=2
+          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[2],x.dx*2,x.dy*2)
         elsif x.dy > 0
-          idx=3
+          enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[3],x.dx*2,x.dy*2)
         end
-        if idx==-1
-          next
-        end
-        enemy_shots << Shot.new(x.xx,x.yy,enemy_bullet_imgs[idx],x.dx*2,x.dy*2)
       end
     end
     enemy_del_shots=[]
@@ -298,6 +307,20 @@ Window.load_resources do
       end
       if x.vanished?
         enemy_del_shots << i
+        next
+      end
+      blocks[now_stage].each do |y|
+        if ![3,6,0].include?(y.type)
+          next
+        end
+        if x===y
+          x.vanish
+          break
+        end
+      end
+      if x.vanished?
+        enemy_del_shots << i
+        next
       end
     end
     enemy_del_shots.each do |i|
