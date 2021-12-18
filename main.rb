@@ -35,6 +35,9 @@ Image.register(:asphalt, 'images/asufaruto.png')
 Image.register(:wood, 'images/wood.png') 
 Image.register(:woodbox, 'images/woodbox_2.png') 
 
+Image.register(:heart, 'images/HP.png')
+Image.register(:heartB, 'images/HP_black.png')
+
 Image.register(:bullet0, 'images/TNT_left.png') 
 Image.register(:bullet1, 'images/TNT_right.png') 
 Image.register(:bullet2, 'images/TNT_up.png')
@@ -74,6 +77,11 @@ Window.load_resources do
   wood_img.set_color_key([0, 0, 0])
   woodbox_img = Image[:woodbox]
   woodbox_img.set_color_key([0, 0, 0])
+  
+  heart_img = Image[:heart]
+  heart_img.set_color_key([0, 0, 0])
+  heartB_img = Image[:heartB]
+  heartB_img.set_color_key([0, 0, 0])
   
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
@@ -130,8 +138,9 @@ Window.load_resources do
   end
   
   shots = []
+  
+  move=[0,0,0,0]
 
-  move=[]
   up=0
   down=1
   right=2
@@ -195,7 +204,20 @@ Window.load_resources do
     
     Sprite.draw(blocks[now_stage])
     
-    #-------------------
+     hearts=Array.new(3)
+    hearts[0] = Sprite.new(0,0,heartB_img)
+    hearts[1] = Sprite.new(32,0,heartB_img)
+    hearts[2] = Sprite.new(64,0,heartB_img)
+    
+    if Input.key_push?(K_A)
+      player.decrease_hp
+    end
+    
+    player.returnhp.times do |i|
+      hearts[i] = Sprite.new(32*i,0,heart_img)
+    end
+    
+    Sprite.draw(hearts)
     
     if Input.key_push?( K_SPACE ) && shots.size < 2
       idx=0
