@@ -47,7 +47,7 @@ class Enemy < Sprite
   end
   def make_move(field,enemies_field)
     if self.ismoving == false
-      r=rand(10000)%4
+      r=rand(4)
       if r==0
         if @grid_x+1 >= Width
           next
