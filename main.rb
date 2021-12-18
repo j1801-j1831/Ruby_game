@@ -29,17 +29,19 @@ Image.register(:enemy3, 'images/dorobo_stop_small_flip.png')
 Image.register(:enemy4, 'images/dorobo_back_left_small.png') 
 Image.register(:enemy5, 'images/dorobo_back_right_small.png') 
 Image.register(:enemy6, 'images/dorobo_front_left_small.png') 
-Image.register(:enemy7, 'images/dorobo_front_right_small.png') 
+Image.register(:enemy7, 'images/dorobo_front_right_small.png')
 
 Image.register(:brick, 'images/Renga.png') 
 Image.register(:tile, 'images/tile.png') 
 Image.register(:asphalt, 'images/asufaruto.png') 
 Image.register(:wood, 'images/wood.png') 
-Image.register(:woodbox, 'images/woodbox_2.png') 
+Image.register(:woodbox, 'images/woodbox.png') 
 
 Image.register(:bullet, 'images/MyShot.png') 
 
 Image.register(:sq, 'images/sq.png') 
+Image.register(:heart, 'images/HP.png')
+Image.register(:heartB, 'images/HP_black.png')
 
 Window.load_resources do
   Window.width  = 1200
@@ -80,6 +82,10 @@ Window.load_resources do
   
   sq_img = Image[:sq]
   sq_img.set_color_key([0, 0, 0])
+  heart_img = Image[:heart]
+  heart_img.set_color_key([0, 0, 0])
+  heartB_img = Image[:heartB]
+  heartB_img.set_color_key([0, 0, 0])
   
   player = Player.new(240, 240, player_img, player_imgs)
   
@@ -132,7 +138,7 @@ Window.load_resources do
   
   shots = []
 
-  move=[]
+  move=[0,0,0,0]
   up=0
   down=1
   right=2
@@ -176,7 +182,20 @@ Window.load_resources do
     
     Sprite.draw(blocks[now_stage])
     
-    #-------------------
+    hearts=Array.new(3)
+    hearts[0] = Sprite.new(0,0,heartB_img)
+    hearts[1] = Sprite.new(32,0,heartB_img)
+    hearts[2] = Sprite.new(64,0,heartB_img)
+    
+    if Input.key_push?(K_A)
+      player.decrease_hp
+    end
+    
+    player.returnhp.times do |i|
+      hearts[i] = Sprite.new(32*i,0,heart_img)
+    end
+    
+    Sprite.draw(hearts)
     
     if Input.key_push?( K_SPACE ) && shots.size < 2
       shots << Shot.new(player.xx,player.yy,bullet_img,player.dirx*8,player.diry*8)
