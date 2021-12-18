@@ -137,7 +137,7 @@ Window.load_resources do
   end
   
   shots = []
-
+  
   move=[0,0,0,0]
   up=0
   down=1
