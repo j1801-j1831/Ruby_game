@@ -13,6 +13,18 @@ class Enemy < Sprite
     @image_interval=0
     #self.collision = [x, y, x+48, y+48]
   end
+  def xx
+    return self.x
+  end
+  def yy
+    return self.y
+  end
+  def dx
+    return @dx
+  end
+  def dy
+    return @dy
+  end
   def moving(dx,dy)
     speed=2
     @moving_times=48/speed
@@ -52,7 +64,7 @@ class Enemy < Sprite
         if @grid_x+1 >= Width
           next
         end
-        if field[@grid_y][@grid_x+1] == 1 && enemies_field[@grid_y][@grid_x+1] == 0
+        if [1,2].include?(field[@grid_y][@grid_x+1]) && enemies_field[@grid_y][@grid_x+1] == 0
           enemies_field[@grid_y][@grid_x] = 0
           enemies_field[@grid_y][@grid_x+1] = 1
           self.moving(1,0)
@@ -61,7 +73,7 @@ class Enemy < Sprite
         if @grid_x-1 < 0
           next
         end
-        if field[@grid_y][@grid_x-1] == 1 && enemies_field[@grid_y][@grid_x-1] == 0
+        if [1,2].include?(field[@grid_y][@grid_x-1]) && enemies_field[@grid_y][@grid_x-1] == 0
           enemies_field[@grid_y][@grid_x] = 0
           enemies_field[@grid_y][@grid_x-1] = 1
           self.moving(-1,0)
@@ -70,7 +82,7 @@ class Enemy < Sprite
         if @grid_y+1 >= Height
           next
         end
-        if field[@grid_y+1][@grid_x] == 1 && enemies_field[@grid_y+1][@grid_x] == 0
+        if [1,2].include?(field[@grid_y+1][@grid_x]) && enemies_field[@grid_y+1][@grid_x] == 0
           enemies_field[@grid_y][@grid_x] = 0
           enemies_field[@grid_y+1][@grid_x] = 1
           self.moving(0,1)
@@ -79,7 +91,7 @@ class Enemy < Sprite
         if @grid_y-1 < 0
           next
         end
-        if field[@grid_y-1][@grid_x] == 1 && enemies_field[@grid_y-1][@grid_x] == 0
+        if [1,2].include?(field[@grid_y-1][@grid_x]) && enemies_field[@grid_y-1][@grid_x] == 0
           enemies_field[@grid_y][@grid_x] = 0
           enemies_field[@grid_y-1][@grid_x] = 1
           self.moving(0,-1)
