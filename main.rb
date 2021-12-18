@@ -119,6 +119,8 @@ Window.load_resources do
           blocks[i] << Block.new(x*48,y*48,tile_img,0)
         when 2 then 
           blocks[i] << Block.new(x*48,y*48,asphalt_img,2)
+        when 3 then 
+          blocks[i] << Block.new(x*48,y*48,brick_img,3)
         when 6 then 
           blocks[i] << Block.new(x*48,y*48,woodbox_img,6)
         else
@@ -149,24 +151,44 @@ Window.load_resources do
       move[left]=1
     end
     
-    if move[up]==1
+    if move[up]==1 && now_stage == 0 #stage1から2(上移動)
       player.x=Window.width/2
       player.y=Window.height - player.image.height
       now_stage=1
       move[up]=0
-    elsif move[down]==1
+    elsif move[up]==1 && now_stage == 3 #stage4からstage3
+      player.x=Window.width/2
+      player.y=Window.height - player.image.height
+      now_stage=2
+      move[up]=0
+    elsif move[down]==1 && now_stage == 1 #stage2から1
       player.x=Window.width/2
       player.y=0
       now_stage=0
       move[down]=0
-    elsif move[right]==1
-      player.x=250
-      player.y=330
-      now_stage=0
+    elsif move[down]==1 && now_stage == 2 #stage3から4
+      player.x=Window.width/2
+      player.y=0
+      now_stage=3
+      move[down]=0
+    elsif move[right]==1 && now_stage == 1 #stage2から3
+      player.x=0
+      player.y=Window.height/2
+      now_stage=2
       move[right]=0
-    elsif move[left]==1
-      player.x=250
-      player.y=300
+    elsif move[right]==1 && now_stage == 0 #stage1から4
+      player.x=0
+      player.y=Window.height/2
+      now_stage=3
+      move[right]=0
+    elsif move[left]==1 && now_stage == 2#stage3から2
+      player.x=Window.width - player.image.width
+      player.y=Window.height/2
+      now_stage=1
+      move[left]=0
+    elsif move[left]==1 && now_stage == 3#stage4から1
+      player.x=Window.width - player.image.width
+      player.y=Window.height/2
       now_stage=0
       move[left]=0
     end
