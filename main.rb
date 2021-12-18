@@ -138,6 +138,7 @@ Window.load_resources do
   end
   
   shots = []
+  enemy_shots = []
   
   move=[0,0,0,0]
 
@@ -204,14 +205,10 @@ Window.load_resources do
     
     Sprite.draw(blocks[now_stage])
     
-     hearts=Array.new(3)
+    hearts=Array.new(3)
     hearts[0] = Sprite.new(0,0,heartB_img)
     hearts[1] = Sprite.new(32,0,heartB_img)
     hearts[2] = Sprite.new(64,0,heartB_img)
-    
-    if Input.key_push?(K_A)
-      player.decrease_hp
-    end
     
     player.returnhp.times do |i|
       hearts[i] = Sprite.new(32*i,0,heart_img)
@@ -250,18 +247,52 @@ Window.load_resources do
       shots.delete_at(i)
     end
     
-    player.make_move(blocks[now_stage])
-    
     enemies[now_stage].each do |x|
+      if x.vanished?
+        next
+      end
       if rand(100) == 0
         x.make_move(fields[now_stage],enemies_field[now_stage])
       end
+      if rand(100) == 0
+        idx=-1
+        if x.dx < 0
+          idx=0
+        elsif x.dx > 0
+          idx=1
+        elsif x.dy < 0
+          idx=2
+        elsif x.dy > 0
+          idx=3
+        end
+        if idx==-1
+          next
+        end
+        enemy_shots << Shot.new(x.xx,x.yy,bullet_imgs[idx],x.dx*2,x.dy*2)
+      end
     end
+    enemy_del_shots=[]
+    enemy_shots.each_with_index do |x, i|
+      x.update
+      if x===player
+        player.decrease_hp
+        x.vanish
+      end
+      if x.vanished?
+        enemy_del_shots << i
+      end
+    end
+    enemy_del_shots.each do |i|
+      enemy_shots.delete_at(i)
+    end
+    
+    player.make_move(blocks[now_stage])
     
     Sprite.update(enemies[now_stage])
     
     #Sprite.draw(blocks)
     Sprite.draw(enemies[now_stage])
+    Sprite.draw(enemy_shots)
     Sprite.draw(shots)
     player.draw
   end

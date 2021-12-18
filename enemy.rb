@@ -13,6 +13,18 @@ class Enemy < Sprite
     @image_interval=0
     #self.collision = [x, y, x+48, y+48]
   end
+  def xx
+    return self.x
+  end
+  def yy
+    return self.y
+  end
+  def dx
+    return @dx
+  end
+  def dy
+    return @dy
+  end
   def moving(dx,dy)
     speed=2
     @moving_times=48/speed
