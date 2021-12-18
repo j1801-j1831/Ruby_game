@@ -8,6 +8,8 @@ require_remote 'block.rb'
 require_remote 'shot.rb'
 require_remote 'stage1.rb'
 require_remote 'stage2.rb'
+require_remote 'stage3.rb'
+require_remote 'stage4.rb'
 
 Image.register(:player, 'images/front_player_small.png') 
 Image.register(:player0, 'images/player_move.png') 
@@ -39,12 +41,12 @@ Image.register(:bullet, 'images/MyShot.png')
 
 Image.register(:sq, 'images/sq.png') 
 
-Height = 15
-Width = 25
-
 Window.load_resources do
   Window.width  = 1200
   Window.height = 720
+  
+  Height = 15
+  Width = 25
 
   player_img = Image[:player]
   player_img.set_color_key([0, 0, 0])
@@ -81,52 +83,50 @@ Window.load_resources do
   
   player = Player.new(240, 240, player_img, player_imgs)
   
-  enemies_field=Array.new(Height).map{Array.new(Width,0)}
-  enemies = []
-  10.times do
-    while true do
-      x=rand(Width)
-      y=rand(Height)
-      if $field[y][x] != 1
-        next
+  fields = []
+  fields << $field1
+  fields << $field2
+  fields << $field3
+  fields << $field4
+  
+  now_stage = 0
+  
+  enemies_field=Array.new(4).map{Array.new(Height).map{Array.new(Width,0)}}
+  enemies = [[],[],[],[]]
+  4.times do |i|
+    5.times do
+      while true do
+        x=rand(Width)
+        y=rand(Height)
+        if ![1,2].include?(fields[i][y][x])
+          next
+        end
+        if enemies_field[i][y][x] != 0
+          next
+        end
+        enemies_field[i][y][x]=1
+        enemies[i] << Enemy.new(x*48, y*48, enemy_img, enemy_imgs)
+        break
       end
-      if enemies_field[y][x] != 0
-        next
-      end
-      enemies_field[y][x]=1
-      enemies << Enemy.new(x*48, y*48, enemy_img, enemy_imgs)
-      break
     end
   end
   
-  blocks = []
-  blocks2 = []
-  15.times do |i|
-    25.times do |j|
-      case $field[i][j]
-      when 1 then
-        blocks << Block.new(j*48,i*48,asphalt_img,1)
-      when 0 then 
-        blocks << Block.new(j*48,i*48,tile_img,0)
-      when 2 then 
-        blocks << Block.new(j*48,i*48,asphalt_img,2)
-      when 6 then 
-        blocks << Block.new(j*48,i*48,woodbox_img,6)
-      else
+  blocks = [[],[],[],[]]
+  4.times do |i|
+    15.times do |y|
+      25.times do |x|
+        case fields[i][y][x]
+        when 1 then
+          blocks[i] << Block.new(x*48,y*48,asphalt_img,1)
+        when 0 then 
+          blocks[i] << Block.new(x*48,y*48,tile_img,0)
+        when 2 then 
+          blocks[i] << Block.new(x*48,y*48,asphalt_img,2)
+        when 6 then 
+          blocks[i] << Block.new(x*48,y*48,woodbox_img,6)
+        else
+        end
       end
-      
-      case $field2[i][j]
-      when 1 then
-        blocks2 << Block.new(j*48,i*48,asphalt_img,1)
-      when 0 then
-        blocks2 << Block.new(j*48,i*48,tile_img,0)
-      when 2 then
-        blocks2 << Block.new(j*48,i*48,asphalt_img,2)
-      when 6 then
-        blocks2 << Block.new(j*48,i*48,woodbox_img,6)
-      else
-      end
-      
     end
   end
   
@@ -138,7 +138,7 @@ Window.load_resources do
   right=2
   left=3
   move[0]=0
-  blocks_now=blocks
+  
   Window.loop do
     #Sprite.update(enemies)
     #Sprite.draw(enemies)
@@ -155,30 +155,26 @@ Window.load_resources do
     if move[up]==1
       player.x=Window.width/2
       player.y=Window.height - player.image.height
-      blocks_now=blocks2
+      now_stage=1
       move[up]=0
     elsif move[down]==1
       player.x=Window.width/2
       player.y=0
-      blocks_now=blocks
+      now_stage=0
       move[down]=0
     elsif move[right]==1
       player.x=250
       player.y=330
-      blocks_now=blocks
+      now_stage=0
       move[right]=0
     elsif move[left]==1
       player.x=250
       player.y=300
-      blocks_now=blocks
+      now_stage=0
       move[left]=0
     end
     
-    if blocks_now==blocks
-      Sprite.draw(blocks)
-    elsif blocks_now==blocks2
-      Sprite.draw(blocks2)
-    end
+    Sprite.draw(blocks[now_stage])
     
     #-------------------
     
@@ -188,6 +184,13 @@ Window.load_resources do
     del_shots=[]
     shots.each_with_index do |x, i|
       x.update
+      enemies[now_stage].each do |y|
+        if x===y
+          x.vanish
+          y.vanish
+          break
+        end
+      end
       if x.vanished?
         del_shots << i
       end
@@ -196,18 +199,18 @@ Window.load_resources do
       shots.delete_at(i)
     end
     
-    player.make_move(blocks_now)
+    player.make_move(blocks[now_stage])
     
-    enemies.each do |x|
+    enemies[now_stage].each do |x|
       if rand(100) == 0
-        x.make_move($field,enemies_field)
+        x.make_move(fields[now_stage],enemies_field[now_stage])
       end
     end
     
-    Sprite.update(enemies)
+    Sprite.update(enemies[now_stage])
     
     #Sprite.draw(blocks)
-    Sprite.draw(enemies)
+    Sprite.draw(enemies[now_stage])
     Sprite.draw(shots)
     player.draw
   end
